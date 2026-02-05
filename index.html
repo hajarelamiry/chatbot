@@ -7,15 +7,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #1a73e8;
-            --primary-dark: #1557b0;
-            --bg: #f8f9fa;
-            --surface: #ffffff;
-            --text: #202124;
-            --text-secondary: #5f6368;
-            --border: #dadce0;
-            --success: #34a853;
-            --error: #ea4335;
+            --bg-dark: #0f1419;
+            --bg-card: #1a1f2e;
+            --bg-input: #252d3d;
+            --accent: #00d9ff;
+            --accent-glow: rgba(0, 217, 255, 0.2);
+            --purple: #7c3aed;
+            --text: #e8eaed;
+            --text-dim: #9ca3af;
+            --border: #2d3548;
+            --user-msg: #6366f1;
+            --bot-msg: #1e293b;
         }
 
         * {
@@ -25,96 +27,158 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background: var(--bg);
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
             color: var(--text);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 900px;
-            background: var(--surface);
-            border-radius: 16px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            height: 100vh;
             overflow: hidden;
         }
 
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            max-width: 100%;
+        }
+
+        /* HEADER */
         .header {
-            background: var(--primary);
-            color: white;
-            padding: 32px 24px;
-            text-align: center;
+            background: linear-gradient(135deg, var(--bg-card) 0%, #141925 100%);
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-shrink: 0;
         }
 
         .avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: white;
-            color: var(--primary);
-            margin: 0 auto 16px;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--purple) 100%);
+            color: var(--bg-dark);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.5em;
-            font-weight: 600;
-        }
-
-        h1 {
-            font-size: 1.75em;
+            font-size: 1.5em;
             font-weight: 700;
-            margin-bottom: 8px;
+            box-shadow: 0 0 20px var(--accent-glow);
+            flex-shrink: 0;
         }
 
-        .subtitle {
-            font-size: 1em;
-            opacity: 0.95;
+        .header-info {
+            flex: 1;
+            min-width: 0;
         }
 
-        .info-banner {
-            background: #e8f0fe;
-            color: var(--primary-dark);
-            padding: 16px 24px;
-            text-align: center;
-            font-size: 0.9em;
+        .header-name {
+            font-size: 1.1em;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent) 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 2px;
+        }
+
+        .header-subtitle {
+            font-size: 0.8em;
+            color: var(--text-dim);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: pulse-dot 2s infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--accent); }
+            50% { opacity: 0.5; box-shadow: 0 0 4px var(--accent); }
+        }
+
+        /* SUGGESTIONS HORIZONTALES */
+        .suggestions-bar {
+            background: var(--bg-card);
             border-bottom: 1px solid var(--border);
+            padding: 12px 16px;
+            overflow-x: auto;
+            white-space: nowrap;
+            flex-shrink: 0;
+            -webkit-overflow-scrolling: touch;
         }
 
-        .info-banner strong {
-            font-weight: 600;
+        .suggestions-bar::-webkit-scrollbar {
+            height: 4px;
         }
 
-        .chat-container {
-            display: flex;
-            flex-direction: column;
-            height: 550px;
+        .suggestions-bar::-webkit-scrollbar-track {
+            background: var(--bg-dark);
         }
 
+        .suggestions-bar::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 2px;
+        }
+
+        .chip {
+            display: inline-block;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-right: 8px;
+        }
+
+        .chip:hover {
+            background: var(--accent);
+            color: var(--bg-dark);
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        /* MESSAGES */
         .messages {
             flex: 1;
             overflow-y: auto;
-            padding: 24px;
+            padding: 20px 16px;
             display: flex;
             flex-direction: column;
             gap: 16px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .messages::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+
+        .messages::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
         }
 
         .message {
             display: flex;
             gap: 12px;
             max-width: 85%;
-            animation: slideUp 0.3s ease;
+            animation: slideIn 0.3s ease;
         }
 
-        @keyframes slideUp {
+        @keyframes slideIn {
             from {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(15px);
             }
             to {
                 opacity: 1;
@@ -130,7 +194,7 @@
         .message-avatar {
             width: 36px;
             height: 36px;
-            border-radius: 50%;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -139,107 +203,95 @@
         }
 
         .message.user .message-avatar {
-            background: var(--primary);
-            color: white;
+            background: linear-gradient(135deg, var(--user-msg) 0%, #8b5cf6 100%);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
         }
 
         .message.assistant .message-avatar {
-            background: var(--bg);
-            color: var(--text);
+            background: linear-gradient(135deg, var(--accent) 0%, #06b6d4 100%);
+            box-shadow: 0 4px 12px var(--accent-glow);
         }
 
         .message-content {
-            background: var(--bg);
             padding: 12px 16px;
-            border-radius: 12px;
+            border-radius: 16px;
             line-height: 1.6;
-            font-size: 0.95em;
+            font-size: 0.9em;
+            word-wrap: break-word;
         }
 
         .message.user .message-content {
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--user-msg) 0%, #7c3aed 100%);
             color: white;
+            border-bottom-right-radius: 4px;
         }
 
-        .suggestions {
-            padding: 16px 24px;
-            border-top: 1px solid var(--border);
-            background: var(--bg);
-        }
-
-        .suggestions-title {
-            font-size: 0.8em;
-            font-weight: 600;
-            color: var(--text-secondary);
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .chips {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .chip {
-            background: white;
+        .message.assistant .message-content {
+            background: var(--bot-msg);
+            color: var(--text);
             border: 1px solid var(--border);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            cursor: pointer;
-            transition: all 0.2s;
+            border-bottom-left-radius: 4px;
         }
 
-        .chip:hover {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
+        /* INPUT AREA */
         .input-area {
-            padding: 16px 24px;
+            padding: 16px;
+            background: var(--bg-card);
             border-top: 1px solid var(--border);
             display: flex;
-            gap: 12px;
+            gap: 10px;
             align-items: center;
+            flex-shrink: 0;
         }
 
         input {
             flex: 1;
-            padding: 12px 16px;
+            padding: 14px 18px;
+            background: var(--bg-input);
             border: 2px solid var(--border);
             border-radius: 24px;
             font-family: inherit;
-            font-size: 0.95em;
-            transition: border-color 0.2s;
+            font-size: 0.9em;
+            color: var(--text);
+            transition: all 0.3s;
+        }
+
+        input::placeholder {
+            color: var(--text-dim);
         }
 
         input:focus {
             outline: none;
-            border-color: var(--primary);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
         }
 
         button {
-            background: var(--primary);
-            color: white;
+            background: linear-gradient(135deg, var(--accent) 0%, #06b6d4 100%);
+            color: var(--bg-dark);
             border: none;
-            padding: 12px 24px;
+            padding: 14px 24px;
             border-radius: 24px;
             font-family: inherit;
-            font-size: 0.95em;
-            font-weight: 600;
+            font-size: 0.9em;
+            font-weight: 700;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px var(--accent-glow);
+            white-space: nowrap;
         }
 
-        button:hover {
-            background: var(--primary-dark);
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--accent-glow);
+        }
+
+        button:active:not(:disabled) {
+            transform: translateY(0);
         }
 
         button:disabled {
-            opacity: 0.5;
+            opacity: 0.6;
             cursor: not-allowed;
         }
 
@@ -247,8 +299,8 @@
             display: inline-block;
             width: 16px;
             height: 16px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-top-color: white;
+            border: 3px solid rgba(15, 20, 25, 0.3);
+            border-top-color: var(--bg-dark);
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
@@ -258,77 +310,137 @@
         }
 
         .error-message {
-            background: #fce8e6;
-            color: var(--error);
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
             padding: 12px 16px;
-            border-radius: 8px;
-            margin: 16px 24px;
-            font-size: 0.9em;
+            border-radius: 12px;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            font-size: 0.85em;
+            max-width: 85%;
+            align-self: center;
         }
 
+        /* MOBILE OPTIMIZATIONS */
         @media (max-width: 768px) {
-            .container {
-                height: 100vh;
-                border-radius: 0;
+            .header {
+                padding: 12px 16px;
             }
-            
+
+            .avatar {
+                width: 44px;
+                height: 44px;
+                font-size: 1.3em;
+            }
+
+            .header-name {
+                font-size: 1em;
+            }
+
+            .header-subtitle {
+                font-size: 0.75em;
+            }
+
+            .suggestions-bar {
+                padding: 10px 12px;
+            }
+
+            .chip {
+                font-size: 0.8em;
+                padding: 7px 14px;
+            }
+
+            .messages {
+                padding: 16px 12px;
+                gap: 14px;
+            }
+
             .message {
                 max-width: 90%;
+            }
+
+            .message-avatar {
+                width: 32px;
+                height: 32px;
+                font-size: 1.1em;
+            }
+
+            .message-content {
+                font-size: 0.88em;
+                padding: 10px 14px;
+            }
+
+            .input-area {
+                padding: 12px;
+            }
+
+            input {
+                padding: 12px 16px;
+                font-size: 0.88em;
+            }
+
+            button {
+                padding: 12px 20px;
+                font-size: 0.88em;
+            }
+        }
+
+        /* TRÈS PETITS ÉCRANS */
+        @media (max-width: 380px) {
+            button {
+                padding: 12px 16px;
+                font-size: 0.85em;
+            }
+
+            .message {
+                max-width: 95%;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- HEADER COMPACT -->
         <div class="header">
             <div class="avatar">HE</div>
-            <h1>Hajar Elamiry</h1>
-            <p class="subtitle">Développeur Web Full Stack</p>
+            <div class="header-info">
+                <div class="header-name">Hajar Elamiry</div>
+                <div class="header-subtitle">Assistant IA • Full Stack Developer</div>
+            </div>
+            <div class="status-dot"></div>
         </div>
 
-        <div class="info-banner">
-            ✨ <strong>Explorez mon parcours professionnel de manière interactive</strong>
+        <!-- SUGGESTIONS HORIZONTALES -->
+        <div class="suggestions-bar">
+            <span class="chip" onclick="ask('Quelles sont ses compétences principales ?')">💼 Compétences</span>
+            <span class="chip" onclick="ask('Quel est son parcours ?')">📚 Parcours</span>
+            <span class="chip" onclick="ask('Quels projets a-t-elle réalisés ?')">⚡ Projets</span>
+            <span class="chip" onclick="ask('Comment la contacter ?')">📧 Contact</span>
         </div>
 
-        <div class="chat-container">
-            <div class="messages" id="messages">
-                <div class="message assistant">
-                    <div class="message-avatar">🤖</div>
-                    <div class="message-content">
-                        Bonjour ! Je suis un assistant IA qui connait tout sur Hajar Elamiry. Posez-moi des questions sur son parcours, ses compétences, ou ses projets !
-                    </div>
+        <!-- MESSAGES -->
+        <div class="messages" id="messages">
+            <div class="message assistant">
+                <div class="message-avatar">🤖</div>
+                <div class="message-content">
+                    Bonjour ! Je suis l'assistant IA de Hajar Elamiry. Posez-moi des questions sur son parcours, ses compétences ou ses projets !
                 </div>
             </div>
+        </div>
 
-            <div class="suggestions">
-                <div class="suggestions-title">💡 Questions suggérées</div>
-                <div class="chips">
-                    <div class="chip" onclick="ask('Quelles sont ses compétences principales ?')">Compétences</div>
-                    <div class="chip" onclick="ask('Quel est son parcours ?')">Expérience</div>
-                    <div class="chip" onclick="ask('Quels projets a-t-elle réalisés ?')">Projets</div>
-                    <div class="chip" onclick="ask('Comment la contacter ?')">Contact</div>
-                </div>
-            </div>
-
-            <div class="input-area">
-                <input 
-                    type="text" 
-                    id="userInput" 
-                    placeholder="Posez votre question..."
-                    onkeypress="if(event.key==='Enter') sendMessage()"
-                />
-                <button id="sendBtn" onclick="sendMessage()">Envoyer</button>
-            </div>
+        <!-- INPUT -->
+        <div class="input-area">
+            <input 
+                type="text" 
+                id="userInput" 
+                placeholder="Votre question..."
+                onkeypress="if(event.key==='Enter') sendMessage()"
+            />
+            <button id="sendBtn" onclick="sendMessage()">Envoyer</button>
         </div>
     </div>
 
     <script>
-        // ========================================
-        // CONFIGURATION - MODIFIEZ ICI
-        // ========================================
-        
         const CONFIG = {
-            // VOTRE CV COMPLET
             CV_CONTENT: `
 === INFORMATIONS PERSONNELLES ===
 Nom: Hajar Elamiry
@@ -413,10 +525,6 @@ En cours
             `.trim()
         };
 
-        // ========================================
-        // CODE PRINCIPAL - NE PAS MODIFIER
-        // ========================================
-
         async function sendMessage() {
             const input = document.getElementById('userInput');
             const question = input.value.trim();
@@ -429,24 +537,24 @@ En cours
             const sendBtn = document.getElementById('sendBtn');
             sendBtn.disabled = true;
             sendBtn.innerHTML = '<span class="spinner"></span>';
+            
             const API_URL = window.location.origin;
 
             try {
-              const response = await fetch(API_URL + "/chat", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json" 
-                },
-                body: JSON.stringify({
-                  question,
-                  cv: CONFIG.CV_CONTENT
-                })
-              });
+                const response = await fetch(API_URL + "/chat", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json" 
+                    },
+                    body: JSON.stringify({
+                        question,
+                        cv: CONFIG.CV_CONTENT
+                    })
+                });
 
                 if (!response.ok) {
                     const errorData = await response.json();
-                    console.error('Erreur API:', errorData);
-                    throw new Error(errorData.error?.message || `Erreur ${response.status}`);
+                    throw new Error(errorData.text || `Erreur ${response.status}`);
                 }
 
                 const data = await response.json();
@@ -454,12 +562,12 @@ En cours
                 if (!data.text) {
                     throw new Error('Réponse vide du serveur');
                 }
-                const answer = data.text;
-                addMessage('assistant', answer);
+                
+                addMessage('assistant', data.text);
 
             } catch (error) {
-                console.error('Erreur complète:', error);
-                showError(`❌ Erreur : ${error.message}<br><br>💡 Vérifiez :<br>1. Votre clé API est valide<br>2. L'API Gemini est bien activée<br>3. Votre connexion internet`);
+                console.error('Erreur:', error);
+                showError(`❌ ${error.message}`);
             } finally {
                 sendBtn.disabled = false;
                 sendBtn.innerHTML = 'Envoyer';
@@ -490,15 +598,10 @@ En cours
             const messagesDiv = document.getElementById('messages');
             const errorDiv = document.createElement('div');
             errorDiv.className = 'error-message';
-            errorDiv.innerHTML = message;
+            errorDiv.textContent = message;
             messagesDiv.appendChild(errorDiv);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
-
-        // Message de bienvenue au chargement
-        window.addEventListener('load', () => {
-            console.log('Chatbot Hajar Elamiry chargé avec succès!');
-        });
     </script>
 </body>
 </html>
