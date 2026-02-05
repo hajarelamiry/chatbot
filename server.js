@@ -17,7 +17,7 @@ app.use(express.json());
 // La clé sera lue automatiquement depuis l’environnement
 // mais on peut la passer directement :
 const ai = new GoogleGenAI({
-  apiKey: "AIzaSyAOjLE_4nqcwX5HrJWtqGqMExYwTW_UwSM"
+  apiKey: process.env.GEMINI_API_KEY
 });
 
 app.post("/chat", async (req, res) => {
