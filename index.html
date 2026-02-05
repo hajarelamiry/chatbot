@@ -432,9 +432,10 @@ En cours
             const sendBtn = document.getElementById('sendBtn');
             sendBtn.disabled = true;
             sendBtn.innerHTML = '<span class="spinner"></span>';
+            const API_URL = window.location.origin;
 
             try {
-              const response = await fetch("http://localhost:3000/chat", {
+              const response = await fetch(API_URL + "/chat", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json" 
