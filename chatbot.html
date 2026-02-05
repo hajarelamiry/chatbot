@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assistant IA - Hajar Elamiry</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #1557b0;
+            --bg: #f8f9fa;
+            --surface: #ffffff;
+            --text: #202124;
+            --text-secondary: #5f6368;
+            --border: #dadce0;
+            --success: #34a853;
+            --error: #ea4335;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: var(--surface);
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            overflow: hidden;
+        }
+
+        .header {
+            background: var(--primary);
+            color: white;
+            padding: 32px 24px;
+            text-align: center;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: white;
+            color: var(--primary);
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5em;
+            font-weight: 600;
+        }
+
+        h1 {
+            font-size: 1.75em;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 1em;
+            opacity: 0.95;
+        }
+
+        .info-banner {
+            background: #e8f0fe;
+            color: var(--primary-dark);
+            padding: 16px 24px;
+            text-align: center;
+            font-size: 0.9em;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .info-banner strong {
+            font-weight: 600;
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 550px;
+        }
+
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .message {
+            display: flex;
+            gap: 12px;
+            max-width: 85%;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            flex-shrink: 0;
+        }
+
+        .message.user .message-avatar {
+            background: var(--primary);
+            color: white;
+        }
+
+        .message.assistant .message-avatar {
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .message-content {
+            background: var(--bg);
+            padding: 12px 16px;
+            border-radius: 12px;
+            line-height: 1.6;
+            font-size: 0.95em;
+        }
+
+        .message.user .message-content {
+            background: var(--primary);
+            color: white;
+        }
+
+        .suggestions {
+            padding: 16px 24px;
+            border-top: 1px solid var(--border);
+            background: var(--bg);
+        }
+
+        .suggestions-title {
+            font-size: 0.8em;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .chip {
+            background: white;
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .chip:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .input-area {
+            padding: 16px 24px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: 24px;
+            font-family: inherit;
+            font-size: 0.95em;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 24px;
+            font-family: inherit;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: var(--primary-dark);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: #fce8e6;
+            color: var(--error);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin: 16px 24px;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                height: 100vh;
+                border-radius: 0;
+            }
+            
+            .message {
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="avatar">HE</div>
+            <h1>Hajar Elamiry</h1>
+            <p class="subtitle">Développeur Web Full Stack</p>
+        </div>
+
+        <div class="info-banner">
+            ✨ <strong>Explorez mon parcours professionnel de manière interactive</strong>
+        </div>
+
+        <div class="chat-container">
+            <div class="messages" id="messages">
+                <div class="message assistant">
+                    <div class="message-avatar">🤖</div>
+                    <div class="message-content">
+                        Bonjour ! Je suis un assistant IA qui connait tout sur Hajar Elamiry. Posez-moi des questions sur son parcours, ses compétences, ou ses projets !
+                    </div>
+                </div>
+            </div>
+
+            <div class="suggestions">
+                <div class="suggestions-title">💡 Questions suggérées</div>
+                <div class="chips">
+                    <div class="chip" onclick="ask('Quelles sont ses compétences principales ?')">Compétences</div>
+                    <div class="chip" onclick="ask('Quel est son parcours ?')">Expérience</div>
+                    <div class="chip" onclick="ask('Quels projets a-t-elle réalisés ?')">Projets</div>
+                    <div class="chip" onclick="ask('Comment la contacter ?')">Contact</div>
+                </div>
+            </div>
+
+            <div class="input-area">
+                <input 
+                    type="text" 
+                    id="userInput" 
+                    placeholder="Posez votre question..."
+                    onkeypress="if(event.key==='Enter') sendMessage()"
+                />
+                <button id="sendBtn" onclick="sendMessage()">Envoyer</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========================================
+        // CONFIGURATION - MODIFIEZ ICI
+        // ========================================
+        
+        const CONFIG = {
+            // CLÉ API GOOGLE GEMINI (GRATUITE)
+            API_KEY: 'AIzaSyAOjLE_4nqcwX5HrJWtqGqMExYwTW_UwSM',
+            
+            // VOTRE CV COMPLET
+            CV_CONTENT: `
+=== INFORMATIONS PERSONNELLES ===
+Nom: Hajar Elamiry
+Titre: Développeur web Full Stack
+Localisation: Marrakech, Maroc
+Email: elamiryhajar801@gmail.com
+Téléphone: +212 617 597 001
+LinkedIn: https://www.linkedin.com/in/hajar-elamiry-904a842b8/
+GitHub: https://github.com/hajarelamiry
+
+=== RÉSUMÉ PROFESSIONNEL ===
+Je m'appelle Hajar Elamiry, étudiante en 3ᵉ année de génie informatique à l'ENSA. Je suis passionnée par le développement logiciel (web et mobile) et par l'intelligence artificielle. J'aime transformer des idées en applications utiles, apprendre rapidement, et travailler avec une approche structurée (architecture claire, bonnes pratiques, tests quand possible). Mon objectif est de renforcer mes compétences techniques et de contribuer à des projets professionnels.
+
+=== EXPÉRIENCE PROFESSIONNELLE ===
+
+Vala Bleu - WEB DEVELOPMENT
+JUIN- AOÛT 2025 | Agadir, Maroc
+- Développement d'une plateforme de transport partagé de marchandises visant à connecter des transporteurs et des clients à travers une solution numérique innovante. 
+- Mise en place d'un module permettant aux clients de publier leurs demandes, recevoir des offres des transporteurs et communiquer via un système de messagerie intégré.
+- Outils: React, Nestjs, Mysql, Vite, Typescript, Stripe.
+
+CodeAlpha - FULL-STACK DEVELOPMENT
+SEPTEMBRE 2024
+- Développement de trois applications web (social media platform, e-commerce website, web-based collaborative editing tool) 
+- Outils: Django, React, Node.js, socket.io, Typescript, PayPal.
+
+=== COMPÉTENCES TECHNIQUES ===
+
+Langages de programmation:
+- Java, Python, JEE, JavaScript, C/C++, PHP
+
+Frameworks & Bibliothèques:
+- Spring Boot, Angular, React, NestJS, React Native, Django
+
+Outils & Technologies:
+- Base de données: MySQL, PostgreSQL, MongoDB
+- DevOps: Docker
+- Autres: Git, REST APIs, GraphQL, WebSockets
+
+=== COMPÉTENCES TRANSVERSALES ===
+- Leadership d'équipe
+- Communication claire et efficace
+- Résolution de problèmes complexes
+
+=== FORMATION ===
+
+Baccalauréat en Sciences mathématiques A
+2020-2021
+Mention: Bien
+
+École Nationale des Sciences Appliquées (ENSA)
+3ème année de Génie Informatique
+En cours
+
+=== CERTIFICATIONS ===
+- Mastering Selenium: Web Automation Essentials
+- Git & GitHub for Beginners: From Start to Star
+- Salesforce Trailhead – Adventurer Rank (CRM & Cloud Basics)
+
+=== PROJETS PRINCIPAUX ===
+
+1. Application Web d'E-Banking 2.0
+   Technologies: Java, Spring, Angular, Stripe, PostgreSQL, MongoDB
+   Description: Conception et développement d'une plateforme bancaire sécurisée permettant les virements, paiements et la consultation des comptes.
+
+2. Système de gestion hôtelière
+   Technologies: Java, Spring Boot Ecosystem, Angular
+   Description: Développement d'une application web de gestion hôtelière permettant l'administration des réservations, des clients et des services via une interface moderne et intuitive.
+
+3. Application mobile de suivi de bus
+   Technologies: React Native, Spring Boot, WebSocket
+   Description: Conception d'une application mobile de suivi en temps réel des bus, avec communication instantanée via WebSocket et intégration d'une interface utilisateur interactive.
+
+=== LANGUES ===
+- Arabe: Maternelle 
+- Français: Intermédiaire
+- Anglais: Professionnelle
+
+=== CENTRES D'INTÉRÊT ===
+- Lecture
+- Randonnée et voyage
+            `.trim()
+        };
+
+        // ========================================
+        // CODE PRINCIPAL - NE PAS MODIFIER
+        // ========================================
+
+        async function sendMessage() {
+            const input = document.getElementById('userInput');
+            const question = input.value.trim();
+
+            if (!question) return;
+
+            addMessage('user', question);
+            input.value = '';
+
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.disabled = true;
+            sendBtn.innerHTML = '<span class="spinner"></span>';
+
+            try {
+              const response = await fetch("http://localhost:3000/chat", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json" 
+                },
+                body: JSON.stringify({
+                  question,
+                  cv: CONFIG.CV_CONTENT
+                })
+              });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error('Erreur API:', errorData);
+                    throw new Error(errorData.error?.message || `Erreur ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                if (!data.text) {
+                    throw new Error('Réponse vide du serveur');
+                }
+                const answer = data.text;
+                addMessage('assistant', answer);
+
+            } catch (error) {
+                console.error('Erreur complète:', error);
+                showError(`❌ Erreur : ${error.message}<br><br>💡 Vérifiez :<br>1. Votre clé API est valide<br>2. L'API Gemini est bien activée<br>3. Votre connexion internet`);
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.innerHTML = 'Envoyer';
+            }
+        }
+
+        function addMessage(role, text) {
+            const messagesDiv = document.getElementById('messages');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message ${role}`;
+            
+            const avatar = role === 'user' ? '👤' : '🤖';
+            msgDiv.innerHTML = `
+                <div class="message-avatar">${avatar}</div>
+                <div class="message-content">${text}</div>
+            `;
+            
+            messagesDiv.appendChild(msgDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function ask(question) {
+            document.getElementById('userInput').value = question;
+            sendMessage();
+        }
+
+        function showError(message) {
+            const messagesDiv = document.getElementById('messages');
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.innerHTML = message;
+            messagesDiv.appendChild(errorDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        // Message de bienvenue au chargement
+        window.addEventListener('load', () => {
+            console.log('Chatbot Hajar Elamiry chargé avec succès!');
+        });
+    </script>
+</body>
+</html>
