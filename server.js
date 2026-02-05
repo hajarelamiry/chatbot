@@ -3,19 +3,23 @@ import cors from "cors";
 import { GoogleGenAI } from "@google/genai";
 import path from "path";
 import { fileURLToPath } from "url";
+import dotenv from "dotenv";
+dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// servir le html
-app.use(express.static(__dirname));
-
+// ✅ D'abord on crée l'app
 const app = express();
+
+// ✅ Ensuite seulement on l'utilise
 app.use(cors());
 app.use(express.json());
 
-// La clé sera lue automatiquement depuis l’environnement
-// mais on peut la passer directement :
+// servir le html
+app.use(express.static(__dirname));
+
+// Gemini
 const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY
 });
