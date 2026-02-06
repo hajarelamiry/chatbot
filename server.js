@@ -9,17 +9,13 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// ✅ D'abord on crée l'app
 const app = express();
-
-// ✅ Ensuite seulement on l'utilise
 app.use(cors());
 app.use(express.json());
 
-// servir le html
+
 app.use(express.static(__dirname));
 
-// Gemini
 const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY
 });

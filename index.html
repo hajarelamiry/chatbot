@@ -26,20 +26,25 @@
             box-sizing: border-box;
         }
 
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            position: fixed;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             background: var(--bg-dark);
             color: var(--text);
-            height: 100%;
-            min-height: 100dvh; 
-            overflow: hidden;
         }
 
         .container {
             display: flex;
             flex-direction: column;
-            height: 100%;
-            min-height: 100dvh;
+            height: 100vh;
+            height: 100dvh;
+            width: 100%;
         }
 
         /* HEADER */
@@ -145,15 +150,17 @@
             transform: translateY(-2px);
         }
 
-        /* MESSAGES */
+        /* MESSAGES - CORRECTION PRINCIPALE */
         .messages {
             flex: 1;
             overflow-y: auto;
+            overflow-x: hidden;
             padding: 20px 16px;
             display: flex;
             flex-direction: column;
             gap: 16px;
             -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
         }
 
         .messages::-webkit-scrollbar {
@@ -219,6 +226,7 @@
             line-height: 1.6;
             font-size: 0.9em;
             word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .message.user .message-content {
@@ -395,12 +403,6 @@
             .message {
                 max-width: 95%;
             }
-        }
-
-        @supports (-webkit-touch-callout: none) {
-          .container {
-            height: -webkit-fill-available;
-          }
         }
 
     </style>
@@ -598,7 +600,14 @@ En cours
             `;
             
             messagesDiv.appendChild(msgDiv);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            
+            // Défilement automatique vers le bas avec un petit délai pour l'animation
+            setTimeout(() => {
+                messagesDiv.scrollTo({
+                    top: messagesDiv.scrollHeight,
+                    behavior: 'smooth'
+                });
+            }, 100);
         }
 
         function ask(question) {
@@ -612,7 +621,13 @@ En cours
             errorDiv.className = 'error-message';
             errorDiv.textContent = message;
             messagesDiv.appendChild(errorDiv);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            
+            setTimeout(() => {
+                messagesDiv.scrollTo({
+                    top: messagesDiv.scrollHeight,
+                    behavior: 'smooth'
+                });
+            }, 100);
         }
     </script>
 </body>
