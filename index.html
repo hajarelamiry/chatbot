@@ -29,8 +29,8 @@
         html, body {
             height: 100%;
             width: 100%;
-            overflow: hidden;
-            position: fixed;
+            overflow: hidden;      
+            position: relative;     
         }
 
         body {
@@ -42,10 +42,10 @@
         .container {
             display: flex;
             flex-direction: column;
-            height: 100vh;
             height: 100dvh;
-            width: 100%;
+            max-height: 100dvh;
         }
+
 
         /* HEADER */
         .header {
@@ -219,6 +219,13 @@
             background: linear-gradient(135deg, var(--accent) 0%, #06b6d4 100%);
             box-shadow: 0 4px 12px var(--accent-glow);
         }
+
+        .input-area {
+            position: sticky;
+            bottom: 0;
+            z-index: 100;
+        }
+
 
         .message-content {
             padding: 12px 16px;
