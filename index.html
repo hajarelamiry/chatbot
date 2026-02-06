@@ -416,7 +416,7 @@
 </head>
 <body>
     <div class="container">
-        <!-- HEADER COMPACT -->
+      
         <div class="header">
             <div class="avatar">HE</div>
             <div class="header-info">
@@ -426,7 +426,7 @@
             <div class="status-dot"></div>
         </div>
 
-        <!-- SUGGESTIONS HORIZONTALES -->
+      
         <div class="suggestions-bar">
             <span class="chip" onclick="ask('Quelles sont ses compétences principales ?')">💼 Compétences</span>
             <span class="chip" onclick="ask('Quel est son parcours ?')">📚 Parcours</span>
@@ -434,7 +434,7 @@
             <span class="chip" onclick="ask('Comment la contacter ?')">📧 Contact</span>
         </div>
 
-        <!-- MESSAGES -->
+
         <div class="messages" id="messages">
             <div class="message assistant">
                 <div class="message-avatar">🤖</div>
@@ -444,7 +444,7 @@
             </div>
         </div>
 
-        <!-- INPUT -->
+       
         <div class="input-area">
             <input 
                 type="text" 
@@ -588,7 +588,7 @@ En cours
 
             } catch (error) {
                 console.error('Erreur:', error);
-                showError(`❌ ${error.message}`);
+                showError(`${error.message}`);
             } finally {
                 sendBtn.disabled = false;
                 sendBtn.innerHTML = 'Envoyer';
@@ -608,7 +608,7 @@ En cours
             
             messagesDiv.appendChild(msgDiv);
             
-            // Défilement automatique vers le bas avec un petit délai pour l'animation
+          
             setTimeout(() => {
                 messagesDiv.scrollTo({
                     top: messagesDiv.scrollHeight,
