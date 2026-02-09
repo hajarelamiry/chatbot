@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
+            
             --bg-dark: #0f1419;
             --bg-card: #1a1f2e;
             --bg-input: #252d3d;
@@ -19,6 +20,22 @@
             --user-msg: #6366f1;
             --bot-msg: #1e293b;
         }
+        
+        
+        .light-mode {
+            --bg-dark: #f3f4f6;
+            --bg-card: #ffffff;
+            --bg-input: #f1f5f9;
+            --accent: #2563eb;
+            --accent-glow: rgba(37, 99, 235, 0.2);
+            --purple: #7c3aed;
+            --text: #0f172a;
+            --text-dim: #475569;
+            --border: #e2e8f0;
+            --user-msg: #2563eb;
+            --bot-msg: #ffffff;
+        }
+
 
         * {
             margin: 0;
@@ -411,6 +428,21 @@
                 max-width: 95%;
             }
         }
+        .theme-btn {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 8px 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .theme-btn:hover {
+            background: var(--accent);
+            color: white;
+        }
+
 
     </style>
 </head>
@@ -423,6 +455,7 @@
                 <div class="header-name">Hajar Elamiry</div>
                 <div class="header-subtitle">Assistant IA • Full Stack Developer</div>
             </div>
+            <button id="themeToggle" class="theme-btn">🌙</button>
             <div class="status-dot"></div>
         </div>
 
@@ -636,6 +669,28 @@ En cours
                 });
             }, 100);
         }
+
+        //gestion mode clair et sombre
+        const toggle = document.getElementById("themeToggle");
+        const body = document.body;
+       
+        if (localStorage.getItem("theme") === "light") {
+            body.classList.add("light-mode");
+            toggle.textContent = "☀️";
+        }
+        
+        toggle.addEventListener("click", () => {
+            body.classList.toggle("light-mode");
+        
+            if (body.classList.contains("light-mode")) {
+                localStorage.setItem("theme", "light");
+                toggle.textContent = "☀️";
+            } else {
+                localStorage.setItem("theme", "dark");
+                toggle.textContent = "🌙";
+            }
+        });
+
     </script>
 </body>
 </html>
