@@ -456,6 +456,7 @@
                 <div class="header-subtitle">Assistant IA • Full Stack Developer</div>
             </div>
             <button id="themeToggle" class="theme-btn">🌙</button>
+            <button id="clearBtn" class="theme-btn">🗑️ Supprimer</button>
             <div class="status-dot"></div>
         </div>
 
@@ -469,6 +470,7 @@
 
 
         <div class="messages" id="messages">
+
             <div class="message assistant">
                 <div class="message-avatar">🤖</div>
                 <div class="message-content">
@@ -690,6 +692,20 @@ En cours
                 toggle.textContent = "🌙";
             }
         });
+
+        // gestion du bouton de suppression des conversations
+        const clearBtn = document.getElementById("clearBtn");
+
+        clearBtn.addEventListener("click", () => {
+            const confirmDelete = confirm("Êtes-vous sûr de vouloir supprimer toutes les conversations ?");
+            if (confirmDelete) {
+                const messagesDiv = document.getElementById("messages");
+                messagesDiv.innerHTML = ''; // supprime tout le contenu
+                // Optionnel : ajouter un message de bienvenue après suppression
+                addMessage('assistant', "Bonjour ! Je suis l'assistant IA de Hajar Elamiry. Posez-moi des questions !");
+            }
+        });
+
 
     </script>
 </body>
